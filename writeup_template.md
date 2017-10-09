@@ -46,7 +46,7 @@ Here are the original image, perspective transformed , after application of colo
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
 Ran this and got the movie ready
-![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspect_transform1.png)
+![Alt text](https://github.com/jayamohank/Robotics/blob/master/test_mapping.mp4)
 
 ### Autonomous Navigation and Mapping
 
