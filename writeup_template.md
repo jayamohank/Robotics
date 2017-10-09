@@ -38,7 +38,7 @@ You're reading it!
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
 Here is an example of how to include an image in your writeup.
-Here are the original image, perspective transformed and ag=fetr application of color threshold
+Here are the original image, perspective transformed , after application of color threshold, converted to ROver Centric angles and with mean angle with arrow
 
 ![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspect_transform1.png)
 
