@@ -10,3 +10,12 @@ Jupyter Notebook
 
 ![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspective_transform.png)
 
+4) Applied the Perspective Transform, color threshold
+
+
+
+
+
+
+
+
