@@ -33,19 +33,21 @@
 ### Writeup / README
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
 You're reading it!
 
 ### Notebook Analysis
 #### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
 Here is an example of how to include an image in your writeup.
+Here are the original image, perspective transformed , after application of color threshold, converted to ROver Centric angles and with mean angle with arrow
 
-![alt text][image1]
+![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspect_transform1.png)
+
 
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
+Ran this and got the movie ready
+![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspect_transform1.png)
 
-![alt text][image2]
 ### Autonomous Navigation and Mapping
 
 #### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
