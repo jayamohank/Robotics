@@ -40,6 +40,8 @@ You're reading it!
 Here is an example of how to include an image in your writeup.
 Here are the original image, perspective transformed and ag=fetr application of color threshold
 
+![Alt text](https://github.com/jayamohank/Robotics/blob/master/perspect_transform1.png)
+
 
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
