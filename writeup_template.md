@@ -52,6 +52,11 @@ Ran this and got the movie ready
 
 #### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
 
+Here I have run the perspect transform on the image after defining the proper source and destination. Did the color_threshold and create the obstacle map. Then, the vision image is scaled by 255 so that the colors are displayed properly.
+Then , the op of the color_thresold is converted to rover coordinates, convert to world  for navigable and obstacle and update the world map. Further, the rover coordinates are converted to polar coordinates and the nav_angles are updated.
+
+Then, the find_rocks is called and if any rocks are found, find the coordinates of the point tht is closed to us and update the world map
+
 
 #### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
 
