@@ -56,8 +56,8 @@ def update_rover(Rover, data):
       #'total time:', Rover.total_time, 'samples remaining:', data["sample_count"], 
       #'samples collected:', Rover.samples_collected)
 
-      print('speed =',Rover.vel, 'position =', Rover.pos, 'throttle =', 
-      Rover.throttle, 'steer_angle =', Rover.steer, 'stuck =',Rover.stuck)
+      print('speed =',Rover.vel, 'mode =', Rover.mode, 'throttle =', 
+      Rover.throttle, 'steer_angle =', Rover.steer)
 
       # Get the current image from the center camera of the rover
       imgString = data["image"]
@@ -154,7 +154,6 @@ def create_output_images(Rover):
       buff = BytesIO()
       pil_img.save(buff, format="JPEG")
       encoded_string2 = base64.b64encode(buff.getvalue()).decode("utf-8")
-      time.sleep(0.1)
 
       return encoded_string1, encoded_string2
 

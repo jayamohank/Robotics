@@ -1,5 +1,5 @@
 import numpy as np
-
+import time
 # x Prevent the direct going into the rocks
 # right wall crawling
 
@@ -7,124 +7,55 @@ import numpy as np
 def decision_step(Rover):
 
     if Rover.nav_angles is not None:
-        # Check for Rover.mode status
         if Rover.mode == 'forward':
-            print("forward") 
-            # Check the extent of navigable terrain
-            if len(Rover.nav_angles) >= Rover.stop_forward:  
-                # If mode is forward, navigable terrain looks good 
-                # and velocity is below max, then throttle 
-                if Rover.vel < Rover.max_vel:
-
-                    # condition for stuck code
-                    if Rover.vel < 0.1 and Rover.vel > -1.0:
-                        Rover.stuck_for_time += 1
-                        Rover.throttle = Rover.throttle_set
-                        if Rover.stuck_for_time > 10:
-                            Rover.stuck = True
-                        if Rover.stuck:
-                            Rover.throttle = 0
-                            # Set brake to stored brake value
-                            Rover.brake = Rover.brake_set
-                            Rover.steer = 0
-                            Rover.mode = 'stop'
-                            
-
-                        # Set throttle value to throttle setting
-                    else:
-                        Rover.stuck_for_time = 0
-                        print("Rover not stuck")
-                        Rover.stuck = False
-                        Rover.throttle = Rover.throttle_set
-                        steer_offset = -15
-                        Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi + steer_offset), -15, 15)
-
-                    # to make the throttle proportional to navigable area
-                    # Rover.throttle = len(Rover.nav_angles) / 100
-                else: # Else coast
-                    Rover.throttle = 0
-                    Rover.brake = 0
-
-                # Set steering to average angle clipped to the range +/- 15
-                # for wall crawling
-                #print("Rover not stuck")
-                #steer_offset = -15
-                #Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi + steer_offset), -15, 15)
-                #Rover.data = Rover.steer
-                
-                # Rover.data = np.mean(Rover.nav_angles * 180/np.pi )
-            # If there's a lack of navigable terrain pixels then go to 'stop' mode
-            elif len(Rover.nav_angles) < Rover.stop_forward:
-                    # Set mode to "stop" and hit the brakes!
-                    Rover.throttle = 0
-                    # Set brake to stored brake value
-                    Rover.brake = Rover.brake_set
-                    
-                    Rover.steer = 0
-                    Rover.mode = 'stop'
-
-        # If we're already in "stop" mode then make different decisions
+            if len(Rover.nav_angles) >= Rover.stop_forward:
+               if Rover.vel < 0.05:
+                  if Rover.low_speed_state > 10:
+                     Rover.low_speed_state = 0
+                     Rover.brake = Rover.brake_set
+                     Rover.throttle = 0
+                     Rover.steer = 0
+                     Rover.mode = 'stop'
+                  else:
+                     Rover.low_speed_state += 1
+                     Rover.throttle = Rover.throttle_set 
+                     Rover.brake = 0 
+                     Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+               elif Rover.vel > 1:
+                  Rover.low_speed_state = 0
+                  Rover.throttle = 0
+                  Rover.brake = 0 
+                  Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+               else:
+                  Rover.low_speed_state = 0
+                  Rover.brake = 0 
+                  Rover.throttle = Rover.throttle_set 
+                  Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+            else:
+                 Rover.low_speed_state = 0
+                 Rover.brake = Rover.brake_set
+                 Rover.throttle = 0
+                 Rover.steer = 0
+                 Rover.mode = 'stop'
         elif Rover.mode == 'stop':
-            # If we're in stop mode but still moving keep braking
-            if Rover.vel > 0.2:
-                Rover.throttle = 0
-                
+             if Rover.vel > 0.1:
+                Rover.low_speed_state = 0
                 Rover.brake = Rover.brake_set
-                Rover.steer = 0
-            # If we're not moving (vel < 0.2) then do something else
-            elif Rover.vel <= 0.2:
-                # Now we're stopped and we have vision data to see if there's a path forward
-                if len(Rover.nav_angles) < Rover.go_forward or Rover.stuck:
-                    Rover.throttle = 0
-                    # Release the brake to allow turning
-                    Rover.brake = 0
-                    # Turn range is +/- 15 degrees, when stopped the next line will induce 4-wheel turning
-                    print("turning")
-                    Rover.steer = -15
-                    Rover.mode = 'turn'
-                    
-                # If we're stopped but see sufficient navigable terrain in front then go!
-                if len(Rover.nav_angles) >= Rover.go_forward and (np.mean(Rover.nav_angles * 180/np.pi) < 4.10 and np.mean(Rover.nav_angles * 180/np.pi) > -4.10 ):
-                    # Set throttle back to stored value
-                    Rover.stuck = False
-                    Rover.stuck_for_time = 0
-                    
-                    Rover.throttle = Rover.throttle_set
-                    # Release the brake
-                    Rover.brake = 0
-                    # Set steer to mean angle
-
-                    # for the wall crawling/following
-                    steer_offset = -15
-                    Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi + steer_offset), -15, 15)
-                    Rover.data = Rover.steer
-                    # Rover.data = np.mean(Rover.nav_angles * 180/np.pi )
-                    Rover.mode = 'forward'
-        elif Rover.mode == 'turn':
-            if len(Rover.nav_angles) >= Rover.stop_forward:  
-                   Rover.stuck_for_time = 0
-                   Rover.stuck = False
-                   Rover.throttle = Rover.throttle_set
-                   Rover.brake = 0
-                   Rover.steer = 0
+                Rover.throttle = 0
+             else:
+                if len(Rover.nav_angles) >= 2 * Rover.stop_forward:
+                   turn_off = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                   print("turn_off:", turn_off )
+                   turn_off *= 100
+                   turn_off = np.clip(turn_off, -5, 5)
+                   Rover.steer = turn_off
+                   Rover.throttle = 0
+                   Rover.brake = 0 
                    Rover.mode = 'forward'
- #           else:
- #                  Rover.stuck_for_time += 1
- #                 if Rover.stuck_for_time > 30:
- #                     steer_offset = 15
-                  
+                else:
+                   Rover.steer = -10 
+                   Rover.throttle = 0 
+                   Rover.brake = 0 
 
-    else:
-        Rover.throttle = Rover.throttle_set
-        Rover.steer = 0
-        Rover.brake = 0
-
-    
-        
-        
-    # If in a state where want to pickup a rock send pickup command
-    if Rover.near_sample and Rover.vel == 0 and not Rover.picking_up:
-        Rover.send_pickup = True
-    
     return Rover
 
